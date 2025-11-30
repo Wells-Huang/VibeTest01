@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>p5.js 樹木生長動畫</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+</head>
+<body>
+<script>
+let maxDepth = 8;    // 樹的最大深度
+let growSpeed = 0.04; // 每一幀生長多少
+let currentDepth = 0; // 當前生長深度
+
+function setup() {
+  createCanvas(600, 400);
+  background(220);
+  frameRate(30);
+}
+
+function draw() {
+  background(220);
+  translate(width / 2, height); // 移動到畫布底部中央
+  stroke(100, 50, 20);
+  // 根據當前幀計算生長深度
+  currentDepth = min(maxDepth, frameCount * growSpeed);
+  drawBranch(80, currentDepth);
+  if (currentDepth >= maxDepth) {
+    noLoop(); // 樹長到最大深度後停止動畫
+  }
+}
+
+function drawBranch(len, depth) {
+  if (depth < 1) return;
+  strokeWeight(map(depth, 1, maxDepth, 1, 10));
+  line(0, 0, 0, -len);
+  translate(0, -len);
+  if (depth > 1) {
+    // 左分支
+    push();
+    rotate(radians(-25));
+    drawBranch(len * random(0.65, 0.8), depth - 1);
+    pop();
+    // 右分支
+    push();
+    rotate(radians(25));
+    drawBranch(len * random(0.65, 0.8), depth - 1);
+    pop();
+    // 可加入額外分支增加自然效果
+  } else {
+    // 畫樹葉
+    fill(50, 200, 50, 180);
+    noStroke();
+    ellipse(0, 0, 12, 18);
+  }
+}
+</script>
+</body>
+</html>
