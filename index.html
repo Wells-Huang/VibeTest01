@@ -136,46 +136,50 @@
     return random(SpriteFactory.flowerSprites);
   };
 
-  // Tree (function-style "class" to be maximally compatible)
-  function Tree(x, y) {
-    this.config = {
-      axiom: "F",
-      sentence: "F",
-      generation: 0,
-      maxGenerations: 4,
-      windAngle: 0,
-      posX: x,
-      posY: y,
-      growFactor: 1,
-      windSpeed: 0.05,
-      windStrength: 0.5,
-      branchMinLength: 70,
-      branchShrink: 0.7,
-      branchAngleMin: 10,
-      branchAngleMax: 55,
-      flowerChance: 0.08,
-      fruitChance: 0.02,
-      fruitSizeMin: 14,
-      fruitSizeMax: 26,
-      leafSize: 10
-    };
-    this.colors = {
-      branch: [100, 50, 30],
-      fruit: [random(120,255), random(50,160), random(10,120)]
-    };
-    this.decorations = { flowers: [], fruits: [], leafSprites: [] };
-    this.rules = [
-      { a: "F", b: "F[+FF][-FF]F[+F][-F]", prob: 0.3 },
-      { a: "F", b: "FF[+F][-F][+FF][-FF]", prob: 0.25 },
-      { a: "F", b: "F[++F][--F]F[++F][--F]", prob: 0.2 },
-      { a: "F", b: "FF[+F-F][-F+F]F", prob: 0.15 },
-      { a: "F", b: "F[+FF][-FF][+++F][---F]", prob: 0.1 }
-    ];
-    this.branchData = [];
-    this.branchLayer = createGraphics(windowWidth, windowHeight);
-    this.leafLayer = createGraphics(windowWidth, windowHeight);
-    this.initialize();
-  }
+// ---------- 替換這個整段：Tree 建構子（從 function Tree(x, y) 開始到最後一個 initialize() 呼叫結束） ----------
+function Tree(x, y) {
+  this.config = {
+    axiom: "F",
+    sentence: "F",
+    generation: 0,
+    maxGenerations: 4,
+    windAngle: 0,
+    posX: x,
+    posY: y,
+    growFactor: 1,
+    windSpeed: 0.005,
+    windStrength: 0.05,
+    branchMinLength: 70,
+    branchShrink: 0.7,
+    branchAngleMin: 10,
+    branchAngleMax: 55,
+    // 調整成櫻花樹風格：更多花、比較多但小顆的果實（櫻桃）
+    flowerChance: 0.35,     // 櫻花很多
+    fruitChance: 0.12,      // 櫻桃比原本多一點
+    fruitSizeMin: 8,        // 櫻桃偏小
+    fruitSizeMax: 16,
+    leafSize: 8
+  };
+  // 櫻桃樹偏深棕的樹幹顏色；fruit 用接近櫻桃的紅
+  this.colors = {
+    branch: [80, 45, 25], // RGB-style triplet used by drawing calls
+    fruit: [220 + random(-20, 10), 25 + random(-10, 40), 45 + random(-20, 30)]
+  };
+  this.decorations = { flowers: [], fruits: [], leafSprites: [] };
+  this.rules = [
+    { a: "F", b: "F[+FF][-FF]F[+F][-F]", prob: 0.3 },
+    { a: "F", b: "FF[+F][-F][+FF][-FF]", prob: 0.25 },
+    { a: "F", b: "F[++F][--F]F[++F][--F]", prob: 0.2 },
+    { a: "F", b: "FF[+F-F][-F+F]F", prob: 0.15 },
+    { a: "F", b: "F[+FF][-FF][+++F][---F]", prob: 0.1 }
+  ];
+  this.branchData = [];
+  this.branchLayer = createGraphics(windowWidth, windowHeight);
+  this.leafLayer = createGraphics(windowWidth, windowHeight);
+  this.initialize();
+}
+// ---------- 替換結束 ----------
+
 
   Tree.prototype.initialize = function() {
     this.config.sentence = this.config.axiom;
